@@ -1,8 +1,9 @@
 -- Base de datos del proyecto Hoteles de Playa.
 -- Ejecuta este archivo una vez desde phpMyAdmin o MySQL.
 
-CREATE DATABASE hoteles_de_playa CHARACTER SET utf8;
-USE hoteles_de_playa;
+DROP DATABASE IF EXISTS playa;
+CREATE DATABASE playa CHARACTER SET utf8;
+USE playa;
 
 -- Categorias que aparecen en el catalogo.
 CREATE TABLE categorias (
@@ -16,10 +17,10 @@ CREATE TABLE usuarios (
   usuario_id INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(100) NOT NULL,
   correo VARCHAR(100) NOT NULL,
-  usuario VARCHAR(50) NOT NULL,
   contrasena VARCHAR(50) NOT NULL,
   rol VARCHAR(20) NOT NULL,
   PRIMARY KEY (usuario_id)
+  UNIQUE KEY (correo)
 );
 
 -- La columna categoria guarda el nombre que aparece en la tabla categorias.
@@ -48,8 +49,8 @@ CREATE TABLE imagenes (
 CREATE TABLE reservaciones (
   id_reservacion INT NOT NULL AUTO_INCREMENT,
   usuario_id INT NOT NULL,
+  fecha_estancia DATE NOT NULL,
   total DECIMAL(10,2) NOT NULL,
-  estado VARCHAR(20) NOT NULL,
   PRIMARY KEY (id_reservacion),
   FOREIGN KEY (usuario_id) REFERENCES usuarios (usuario_id)
 );
