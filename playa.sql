@@ -17,10 +17,12 @@ CREATE TABLE usuarios (
   usuario_id INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(100) NOT NULL,
   correo VARCHAR(100) NOT NULL,
-  contrasena VARCHAR(50) NOT NULL,
+  usuario VARCHAR(50) NOT NULL,
+  contrasena VARCHAR(255) NOT NULL,
   rol VARCHAR(20) NOT NULL,
-  PRIMARY KEY (usuario_id)
-  UNIQUE KEY (correo)
+  PRIMARY KEY (usuario_id),
+  UNIQUE KEY (correo),
+  UNIQUE KEY (usuario)
 );
 
 -- La columna categoria guarda el nombre que aparece en la tabla categorias.
@@ -88,5 +90,6 @@ INSERT INTO imagenes (id_habitacion, ruta) VALUES
   (3, 'imagenes/habitaciones/suite.jpg');
 
 -- Cuenta de administrador de ejemplo: usuario admin, contrasena admin123.
+-- La contrasena se guarda cifrada con password_hash() de PHP.
 INSERT INTO usuarios (nombre, correo, usuario, contrasena, rol) VALUES
-  ('Administrador', 'admin@hoteles-playa.local', 'admin', 'admin123', 'admin');
+  ('Administrador', 'admin@hoteles-playa.local', 'admin', '$2y$10$sY6nlihg2SeS78ji3ZjzbuX.oekyRZCrOk43N1HsSPvr7qUZqFh2i', 'admin');
