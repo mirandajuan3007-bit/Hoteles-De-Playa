@@ -21,7 +21,7 @@ $habitaciones = array();
 require_once($raiz . "includes/conexion.php");
 
 $elementosCarrito = array();
-if (isset($_COOKIE["carrito"])) {
+if (isset($_COOKIE["carrito"]) && is_string($_COOKIE["carrito"])) {
     $carritoDecodificado = json_decode($_COOKIE["carrito"], true);
     if (is_array($carritoDecodificado)) {
         $elementosCarrito = $carritoDecodificado;
@@ -29,7 +29,7 @@ if (isset($_COOKIE["carrito"])) {
 }
 
 foreach ($elementosCarrito as $elemento) {
-    if (!isset($elemento["id"]) || !isset($elemento["cantidad"])) {
+    if (!is_array($elemento) || !isset($elemento["id"]) || !isset($elemento["cantidad"])) {
         continue;
     }
 
