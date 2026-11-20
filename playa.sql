@@ -16,11 +16,11 @@ CREATE TABLE categorias (
 CREATE TABLE usuarios (
   usuario_id INT NOT NULL AUTO_INCREMENT,
   nombre VARCHAR(100) NOT NULL,
-  correo VARCHAR(100) NOT NULL,
-  contrasena VARCHAR(50) NOT NULL,
+  correo VARCHAR(100) NOT NULL UNIQUE,
+  usuario VARCHAR(50) NOT NULL UNIQUE,
+  contrasena VARCHAR(255) NOT NULL,
   rol VARCHAR(20) NOT NULL,
   PRIMARY KEY (usuario_id)
-  UNIQUE KEY (correo)
 );
 
 -- La columna categoria guarda el nombre que aparece en la tabla categorias.
@@ -49,7 +49,8 @@ CREATE TABLE imagenes (
 CREATE TABLE reservaciones (
   id_reservacion INT NOT NULL AUTO_INCREMENT,
   usuario_id INT NOT NULL,
-  fecha_estancia DATE NOT NULL,
+  fecha_entrada DATE NOT NULL,
+  fecha_salida DATE NOT NULL,
   total DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (id_reservacion),
   FOREIGN KEY (usuario_id) REFERENCES usuarios (usuario_id)
@@ -60,6 +61,8 @@ CREATE TABLE detalle_reservacion (
   id_reservacion INT NOT NULL,
   id_habitacion INT NOT NULL,
   cantidad INT NOT NULL,
+  -- precio_unitario es por noche; subtotal = precio_unitario * cantidad * noches.
+  -- noches se obtiene con DATEDIFF(fecha_salida, fecha_entrada).
   precio_unitario DECIMAL(10,2) NOT NULL,
   subtotal DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (id_detalle),
@@ -87,6 +90,7 @@ INSERT INTO imagenes (id_habitacion, ruta) VALUES
   (2, 'imagenes/habitaciones/deluxe.jpg'),
   (3, 'imagenes/habitaciones/suite.jpg');
 
--- Cuenta de administrador de ejemplo: usuario admin, contrasena admin123.
+-- Cuenta de administrador de ejemplo. El hash es compatible con password_verify().
+-- En PHP, usar password_hash() al guardar y password_verify() al iniciar sesion.
 INSERT INTO usuarios (nombre, correo, usuario, contrasena, rol) VALUES
-  ('Administrador', 'admin@hoteles-playa.local', 'admin', 'admin123', 'admin');
+  ('Administrador', 'admin@hoteles-playa.local', 'admin', '$2y$10$Rxuk8q5gxGXjz8/eUcsYeeuD5B6Ns1Oh8d3O5TrXzdvAUuOjzEg4u', 'admin');
