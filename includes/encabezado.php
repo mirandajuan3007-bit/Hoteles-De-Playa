@@ -4,7 +4,9 @@
 //   $titulo = "Nombre de la pagina";
 //   $raiz = "";     (pagina en la carpeta principal)
 //   $raiz = "../";  (pagina dentro de una carpeta)
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $rol = "";
 if (isset($_SESSION["rol"])) {
@@ -61,9 +63,9 @@ if (isset($_SESSION["rol"])) {
             </li>
         <?php } else { ?>
             <li>
-                <a href="#"><?php echo $_SESSION["usuario_nombre"]; ?></a>
+                <a href="#"><?php echo htmlspecialchars($_SESSION["usuario_nombre"], ENT_QUOTES, "UTF-8"); ?></a>
                 <ul class="submenu">
-                    <li><a href="<?php echo $raiz; ?>autenticacion/cerrar_sesion.php">Cerrar sesión</a></li>
+                    <li><a href="<?php echo $raiz; ?>autenticacion/cerrar_sesion.php" onclick="return confirm('¿Deseas cerrar la sesión?');">Cerrar sesión</a></li>
                 </ul>
             </li>
         <?php } ?>
