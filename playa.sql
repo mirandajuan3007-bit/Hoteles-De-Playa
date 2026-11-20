@@ -51,7 +51,8 @@ CREATE TABLE imagenes (
 CREATE TABLE reservaciones (
   id_reservacion INT NOT NULL AUTO_INCREMENT,
   usuario_id INT NOT NULL,
-  fecha_estancia DATE NOT NULL,
+  fecha_entrada DATE NOT NULL,
+  fecha_salida DATE NOT NULL,
   total DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (id_reservacion),
   FOREIGN KEY (usuario_id) REFERENCES usuarios (usuario_id)
@@ -62,6 +63,8 @@ CREATE TABLE detalle_reservacion (
   id_reservacion INT NOT NULL,
   id_habitacion INT NOT NULL,
   cantidad INT NOT NULL,
+  -- precio_unitario es por noche; subtotal = precio_unitario * cantidad * noches.
+  -- noches se obtiene con la diferencia entre fecha_salida y fecha_entrada.
   precio_unitario DECIMAL(10,2) NOT NULL,
   subtotal DECIMAL(10,2) NOT NULL,
   PRIMARY KEY (id_detalle),
