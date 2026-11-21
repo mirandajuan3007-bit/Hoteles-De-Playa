@@ -69,3 +69,58 @@ body {
     text-align: center;
     padding: 10px;
 }
+
+/* Formularios (los pueden usar todos los modulos) */
+.formulario {
+    max-width: 400px;
+}
+
+.formulario label {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+.formulario input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #90a4ae;
+    box-sizing: border-box;
+}
+
+.botones {
+    margin-top: 16px;
+}
+
+.boton {
+    display: inline-block;
+    padding: 8px 16px;
+    border: none;
+    background-color: #0077b6;
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.boton:hover {
+    background-color: #0096c7;
+}
+
+.boton-cancelar {
+    background-color: #78909c;
+}
+
+.boton-cancelar:hover {
+    background-color: #90a4ae;
+}
+
+/* Mensajes */
+.mensaje-error {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #fdecea;
+    color: #b71c1c;
+    border: 1px solid #f5c6cb;
+}
