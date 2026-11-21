@@ -5,7 +5,9 @@
 
 // La sesion se abre aqui (y no en el encabezado) porque, si el login es
 // correcto, hay que redirigir antes de mostrar cualquier HTML.
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Si ya inicio sesion, no tiene caso mostrar el formulario.
 if (isset($_SESSION["rol"])) {
@@ -64,16 +66,16 @@ include($raiz . "includes/encabezado.php");
 <h2>Iniciar sesión</h2>
 
 <form class="formulario" method="post" action="login.php" onsubmit="return validarLogin();">
-    <div id="mensaje-error" class="mensaje-error" <?php if ($error == "") { echo 'style="display: none;"'; } ?>>
-        <?php echo $error; ?>
+    <div id="mensaje-error" class="mensaje-error" role="alert" <?php if ($error == "") { echo 'style="display: none;"'; } ?>>
+        <?php echo htmlspecialchars($error, ENT_QUOTES, "UTF-8"); ?>
     </div>
 
     <label for="usuario">Usuario</label>
-    <input type="text" id="usuario" name="usuario" maxlength="50"
-           value="<?php echo htmlspecialchars($usuario); ?>">
+    <input type="text" id="usuario" name="usuario" maxlength="50" autocomplete="username" required
+           value="<?php echo htmlspecialchars($usuario, ENT_QUOTES, "UTF-8"); ?>">
 
     <label for="contrasena">Contraseña</label>
-    <input type="password" id="contrasena" name="contrasena">
+    <input type="password" id="contrasena" name="contrasena" autocomplete="current-password" required>
 
     <div class="botones">
         <button type="submit" class="boton">Iniciar sesión</button>
