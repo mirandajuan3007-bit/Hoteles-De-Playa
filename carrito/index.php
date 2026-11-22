@@ -100,6 +100,7 @@ include($raiz . "includes/encabezado.php");
 <h2>Mi carrito</h2>
 
 <script src="../js/validaciones.js"></script>
+<script src="carrito.js"></script>
 <script>
 function validarFechas() {
     var fechaEntrada = document.getElementById("fecha_entrada").value;
@@ -114,6 +115,20 @@ function validarFechas() {
         return false;
     }
     return true;
+}
+
+function actualizarCantidad(id) {
+    var nueva = document.getElementById("cant-" + id).value;
+    if (cambiarCantidad(id, nueva)) {
+        window.location.href = "index.php";
+    }
+}
+
+function pedirQuitar(id) {
+    if (confirmarAccion("¿Quitar esta habitación del carrito?")) {
+        quitarDelCarrito(id);
+        window.location.href = "index.php";
+    }
 }
 </script>
 
@@ -157,6 +172,7 @@ function validarFechas() {
                 <th>Cantidad</th>
                 <?php if ($subtotalCalculado) { ?><th>Noches</th><?php } ?>
                 <th>Subtotal</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -172,6 +188,12 @@ function validarFechas() {
                         <?php } else { ?>
                             Se calcula al elegir las fechas
                         <?php } ?>
+                    </td>
+                    <td>
+                        <input type="number" id="cant-<?php echo (int)$habitacion["id"]; ?>" min="1" max="10"
+                               value="<?php echo (int)$habitacion["cantidad"]; ?>">
+                        <button type="button" onclick="actualizarCantidad(<?php echo (int)$habitacion["id"]; ?>)">Actualizar</button>
+                        <button type="button" onclick="pedirQuitar(<?php echo (int)$habitacion["id"]; ?>)">Quitar</button>
                     </td>
                 </tr>
             <?php } ?>
