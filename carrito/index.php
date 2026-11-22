@@ -1,12 +1,7 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-if (!isset($_SESSION["rol"]) || $_SESSION["rol"] !== "huesped") {
-    header("Location: ../autenticacion/login.php");
-    exit;
-}
+// CU-04: solo entran usuarios con sesion (huesped o administrador).
+include_once("../includes/permisos.php");
+permitirSolo(array("huesped", "admin"));
 
 $titulo = "Mi carrito";
 $raiz = "../";
