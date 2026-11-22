@@ -65,7 +65,12 @@ include($raiz . "includes/encabezado.php");
 
 <h2>Iniciar sesión</h2>
 
-<form class="formulario" method="post" action="login.php" onsubmit="return validarLogin();">
+<?php if (isset($_GET["registro"]) && $error == "") { ?>
+    <div class="mensaje-exito" role="status">Tu cuenta se creó correctamente. Ya puedes iniciar sesión.</div>
+<?php } ?>
+
+<!-- novalidate: la validacion la hace JavaScript (validarLogin) y no el navegador. -->
+<form class="formulario" method="post" action="login.php" onsubmit="return validarLogin();" novalidate>
     <div id="mensaje-error" class="mensaje-error" role="alert" <?php if ($error == "") { echo 'style="display: none;"'; } ?>>
         <?php echo htmlspecialchars($error, ENT_QUOTES, "UTF-8"); ?>
     </div>

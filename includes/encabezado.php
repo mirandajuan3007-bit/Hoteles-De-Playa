@@ -49,7 +49,7 @@ if (isset($_SESSION["rol"])) {
             </li>
         <?php } ?>
 
-        <?php if ($rol == "huesped") { ?>
+        <?php if ($rol == "huesped" || $rol == "admin") { ?>
             <li><a href="<?php echo $raiz; ?>carrito/index.php">Mi carrito</a></li>
         <?php } ?>
 
@@ -73,3 +73,14 @@ if (isset($_SESSION["rol"])) {
 </nav>
 
 <main class="contenido">
+
+<?php
+// Mensaje que deja otra pagina antes de redirigir (por ejemplo, "Acceso no autorizado").
+// Se muestra una sola vez y se borra.
+if (isset($_SESSION["mensaje"])) {
+?>
+    <div class="mensaje-error" role="alert"><?php echo htmlspecialchars($_SESSION["mensaje"], ENT_QUOTES, "UTF-8"); ?></div>
+<?php
+    unset($_SESSION["mensaje"]);
+}
+?>
