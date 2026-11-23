@@ -43,11 +43,11 @@ if (isset($_GET["buscar"])) {
     // Se valida tambien en PHP por si el navegador tiene JavaScript apagado.
     if (strlen($texto) > 100) {
         $error = "El texto de búsqueda no puede pasar de 100 caracteres.";
-    } elseif ($precioMin != "" && !ctype_digit($precioMin)) {
-        $error = "El precio mínimo debe ser un número entero mayor o igual a 0.";
-    } elseif ($precioMax != "" && !ctype_digit($precioMax)) {
-        $error = "El precio máximo debe ser un número entero mayor o igual a 0.";
-    } elseif ($precioMin != "" && $precioMax != "" && (int)$precioMin > (int)$precioMax) {
+    } elseif ($precioMin != "" && (!preg_match('/^\d+(\.\d{1,2})?$/', $precioMin) || (float)$precioMin > 1000000)) {
+        $error = "El precio mínimo debe ser un número de hasta dos decimales entre 0 y 1000000.";
+    } elseif ($precioMax != "" && (!preg_match('/^\d+(\.\d{1,2})?$/', $precioMax) || (float)$precioMax > 1000000)) {
+        $error = "El precio máximo debe ser un número de hasta dos decimales entre 0 y 1000000.";
+    } elseif ($precioMin != "" && $precioMax != "" && (float)$precioMin > (float)$precioMax) {
         $error = "El precio mínimo no puede ser mayor que el precio máximo.";
     }
 }
@@ -134,11 +134,11 @@ include($raiz . "includes/encabezado.php");
     </select>
 
     <label for="precio_min">Precio mínimo por noche</label>
-    <input type="text" id="precio_min" name="precio_min" maxlength="7" inputmode="numeric"
+    <input type="number" id="precio_min" name="precio_min" min="0" max="1000000" step="0.01" inputmode="decimal"
            value="<?php echo htmlspecialchars($precioMin, ENT_QUOTES, "UTF-8"); ?>">
 
     <label for="precio_max">Precio máximo por noche</label>
-    <input type="text" id="precio_max" name="precio_max" maxlength="7" inputmode="numeric"
+    <input type="number" id="precio_max" name="precio_max" min="0" max="1000000" step="0.01" inputmode="decimal"
            value="<?php echo htmlspecialchars($precioMax, ENT_QUOTES, "UTF-8"); ?>">
 
     <div class="botones">
