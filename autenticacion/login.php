@@ -15,15 +15,17 @@ if (isset($_SESSION["rol"])) {
     exit;
 }
 
-$usuario = "";
+// No usar $usuario ni $contrasena: config.inc.php ya usa esos nombres
+// ($GLOBALS["usuario"], $GLOBALS["contrasena"]) y se sobrescribirian.
+$nombreUsuario = "";
 $error = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $usuario = trim($_POST["usuario"] ?? "");
-    $contrasena = $_POST["contrasena"] ?? "";
+    $nombreUsuario = trim($_POST["usuario"] ?? "");
+    $clave = $_POST["contrasena"] ?? "";
 
     // Se valida otra vez en PHP por si el navegador tiene JavaScript apagado.
-    if ($usuario == "" || $contrasena == "") {
+    if ($nombreUsuario == "" || $clave == "") {
         $error = "Escribe tu usuario y tu contraseña.";
     } else {
         include_once("../includes/conexion.php");
@@ -31,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Consulta preparada: el usuario nunca se pega directo en el SQL.
         $sql = "SELECT usuario_id, nombre, contrasena, rol FROM usuarios WHERE usuario = ?";
         $consulta = mysqli_prepare($conexion, $sql);
-        mysqli_stmt_bind_param($consulta, "s", $usuario);
+        mysqli_stmt_bind_param($consulta, "s", $nombreUsuario);
         mysqli_stmt_execute($consulta);
         mysqli_stmt_bind_result($consulta, $id, $nombre, $hash, $rol);
         $encontrado = mysqli_stmt_fetch($consulta);
@@ -39,7 +41,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         mysqli_close($conexion);
 
         // password_verify compara la contraseña escrita con la cifrada en la BD.
-        if ($encontrado && password_verify($contrasena, $hash)) {
+        if ($encontrado && password_verify($clave, $hash)) {
             // Se cambia el id de la sesion al entrar, por seguridad.
             session_regenerate_id(true);
 
@@ -77,7 +79,7 @@ include($raiz . "includes/encabezado.php");
 
     <label for="usuario">Usuario</label>
     <input type="text" id="usuario" name="usuario" maxlength="50" autocomplete="username" required
-           value="<?php echo htmlspecialchars($usuario, ENT_QUOTES, "UTF-8"); ?>">
+           value="<?php echo htmlspecialchars($nombreUsuario, ENT_QUOTES, "UTF-8"); ?>">
 
     <label for="contrasena">Contraseña</label>
     <input type="password" id="contrasena" name="contrasena" autocomplete="current-password" required>
