@@ -1,5 +1,13 @@
 // JavaScript de la busqueda (CU-10).
-// Usa campoVacio() y numeroValido() de js/validaciones.js, que se carga antes.
+// Usa campoVacio() de js/validaciones.js, que se carga antes.
+
+function precioValido(valor) {
+    if (!/^\d+(\.\d{1,2})?$/.test(valor)) {
+        return false;
+    }
+    var precio = Number(valor);
+    return precio >= 0 && precio <= 1000000;
+}
 
 // Se llama al enviar el formulario. Si devuelve false, no se envia.
 function validarBusqueda() {
@@ -12,13 +20,13 @@ function validarBusqueda() {
         return false;
     }
 
-    // Los precios son opcionales, pero si se escriben deben ser enteros.
-    if (!campoVacio(minimo) && !numeroValido(minimo, 0, 1000000)) {
-        alert("El precio mínimo debe ser un número entero mayor o igual a 0.");
+    // Los precios admiten centavos; numeroValido() solo acepta enteros.
+    if (!campoVacio(minimo) && !precioValido(minimo)) {
+        alert("El precio mínimo debe ser un número de hasta dos decimales entre 0 y 1000000.");
         return false;
     }
-    if (!campoVacio(maximo) && !numeroValido(maximo, 0, 1000000)) {
-        alert("El precio máximo debe ser un número entero mayor o igual a 0.");
+    if (!campoVacio(maximo) && !precioValido(maximo)) {
+        alert("El precio máximo debe ser un número de hasta dos decimales entre 0 y 1000000.");
         return false;
     }
     if (!campoVacio(minimo) && !campoVacio(maximo) && Number(minimo) > Number(maximo)) {
