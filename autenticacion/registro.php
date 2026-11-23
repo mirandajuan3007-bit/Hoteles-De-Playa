@@ -15,28 +15,30 @@ if (isset($_SESSION["rol"])) {
 $error = "";
 $nombre = "";
 $correo = "";
-$usuario = "";
+// No usar $usuario ni $contrasena: config.inc.php ya usa esos nombres
+// ($GLOBALS["usuario"], $GLOBALS["contrasena"]) y se sobrescribirian.
+$nombreUsuario = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = trim($_POST["nombre"] ?? "");
     $correo = trim($_POST["correo"] ?? "");
-    $usuario = trim($_POST["usuario"] ?? "");
-    $contrasena = $_POST["contrasena"] ?? "";
+    $nombreUsuario = trim($_POST["usuario"] ?? "");
+    $clave = $_POST["contrasena"] ?? "";
     $confirmar = $_POST["confirmar"] ?? "";
 
     // Se valida otra vez en PHP por si el navegador tiene JavaScript apagado.
-    if ($nombre == "" || $correo == "" || $usuario == "" || $contrasena == "") {
+    if ($nombre == "" || $correo == "" || $nombreUsuario == "" || $clave == "") {
         $error = "Completa todos los campos.";
     } elseif (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
         $error = "Escribe un correo válido.";
-    } elseif ($contrasena != $confirmar) {
+    } elseif ($clave != $confirmar) {
         $error = "Las contraseñas no coinciden.";
     } else {
         include_once("../includes/conexion.php");
 
         // Revisa que el correo o el usuario no esten ocupados.
         $consulta = mysqli_prepare($conexion, "SELECT usuario_id FROM usuarios WHERE correo = ? OR usuario = ?");
-        mysqli_stmt_bind_param($consulta, "ss", $correo, $usuario);
+        mysqli_stmt_bind_param($consulta, "ss", $correo, $nombreUsuario);
         mysqli_stmt_execute($consulta);
         mysqli_stmt_store_result($consulta);
         $yaExiste = mysqli_stmt_num_rows($consulta) > 0;
@@ -46,10 +48,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $error = "Ese correo o nombre de usuario ya está registrado.";
         } else {
             // La contraseña se guarda cifrada.
-            $hash = password_hash($contrasena, PASSWORD_DEFAULT);
+            $hash = password_hash($clave, PASSWORD_DEFAULT);
             $rol = "huesped";
             $consulta = mysqli_prepare($conexion, "INSERT INTO usuarios (nombre, correo, usuario, contrasena, rol) VALUES (?, ?, ?, ?, ?)");
-            mysqli_stmt_bind_param($consulta, "sssss", $nombre, $correo, $usuario, $hash, $rol);
+            mysqli_stmt_bind_param($consulta, "sssss", $nombre, $correo, $nombreUsuario, $hash, $rol);
             $guardado = mysqli_stmt_execute($consulta);
             mysqli_stmt_close($consulta);
 
@@ -88,7 +90,7 @@ include($raiz . "includes/encabezado.php");
 
     <label for="usuario">Nombre de usuario</label>
     <input type="text" id="usuario" name="usuario" maxlength="50" autocomplete="username" required
-           value="<?php echo htmlspecialchars($usuario, ENT_QUOTES, "UTF-8"); ?>">
+           value="<?php echo htmlspecialchars($nombreUsuario, ENT_QUOTES, "UTF-8"); ?>">
 
     <label for="contrasena">Contraseña</label>
     <input type="password" id="contrasena" name="contrasena" autocomplete="new-password" required>
