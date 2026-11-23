@@ -20,7 +20,7 @@ function guardarCarrito(lista) {
 // Si el tipo ya está en el carrito, suma la cantidad. Máximo 10 por tipo.
 function agregarAlCarrito(id, cantidad) {
     if (!numeroValido(cantidad, 1, 10)) {
-        alert("La cantidad debe ser un número entre 1 y 10.");
+        alert("La cantidad debe ser un número entero entre 1 y 10.");
         return false;
     }
 
@@ -48,7 +48,7 @@ function agregarAlCarrito(id, cantidad) {
 // Cambia la cantidad de un tipo de habitación (CU-12). Debe estar entre 1 y 10.
 function cambiarCantidad(id, nueva) {
     if (!numeroValido(nueva, 1, 10)) {
-        alert("La cantidad debe ser un número entre 1 y 10.");
+        alert("La cantidad debe ser un número entero entre 1 y 10.");
         return false;
     }
 
