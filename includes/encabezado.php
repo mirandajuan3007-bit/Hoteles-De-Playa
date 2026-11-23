@@ -12,6 +12,23 @@ $rol = "";
 if (isset($_SESSION["rol"])) {
     $rol = $_SESSION["rol"];
 }
+
+// Categorias para el submenu "Habitaciones" (CU-08), leidas de la base de datos.
+// Se usa una conexion propia porque algunas paginas ya cerraron la suya.
+include_once(__DIR__ . "/../config.inc.php");
+mysqli_report(MYSQLI_REPORT_OFF);
+$categoriasMenu = array();
+$conexionMenu = @mysqli_connect($GLOBALS["servidor"], $GLOBALS["usuario"], $GLOBALS["contrasena"], $GLOBALS["base_datos"]);
+if ($conexionMenu) {
+    mysqli_set_charset($conexionMenu, "utf8");
+    $resultadoMenu = mysqli_query($conexionMenu, "SELECT nombre FROM categorias ORDER BY nombre");
+    if ($resultadoMenu) {
+        while ($filaMenu = mysqli_fetch_assoc($resultadoMenu)) {
+            $categoriasMenu[] = $filaMenu["nombre"];
+        }
+    }
+    mysqli_close($conexionMenu);
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -34,6 +51,9 @@ if (isset($_SESSION["rol"])) {
             <a href="<?php echo $raiz; ?>catalogo/index.php">Habitaciones</a>
             <ul class="submenu">
                 <li><a href="<?php echo $raiz; ?>catalogo/index.php">Ver todas</a></li>
+                <?php foreach ($categoriasMenu as $categoriaMenu) { ?>
+                    <li><a href="<?php echo $raiz; ?>catalogo/index.php?categoria=<?php echo urlencode($categoriaMenu); ?>"><?php echo htmlspecialchars($categoriaMenu, ENT_QUOTES, "UTF-8"); ?></a></li>
+                <?php } ?>
             </ul>
         </li>
 
@@ -50,7 +70,7 @@ if (isset($_SESSION["rol"])) {
         <?php } ?>
 
         <?php if ($rol == "huesped" || $rol == "admin") { ?>
-            <li><a href="<?php echo $raiz; ?>carrito/index.php">Mi carrito</a></li>
+            <li><a href="<?php echo $raiz; ?>carrito/index.php">Mi carrito (<span id="contador-carrito">0</span>)</a></li>
         <?php } ?>
 
         <?php if ($rol == "") { ?>
@@ -71,6 +91,33 @@ if (isset($_SESSION["rol"])) {
         <?php } ?>
     </ul>
 </nav>
+
+<script>
+// CU-11: muestra en el menu cuantas habitaciones hay en la cookie "carrito".
+// Si otra pagina cambia el carrito sin recargar, puede llamar actualizarContadorCarrito().
+function actualizarContadorCarrito() {
+    var contador = document.getElementById("contador-carrito");
+    if (!contador) {
+        return;
+    }
+    var total = 0;
+    var partes = document.cookie.split("; ");
+    for (var i = 0; i < partes.length; i++) {
+        if (partes[i].indexOf("carrito=") == 0) {
+            try {
+                var lista = JSON.parse(decodeURIComponent(partes[i].substring(8)));
+                for (var j = 0; j < lista.length; j++) {
+                    total = total + Number(lista[j].cantidad);
+                }
+            } catch (e) {
+                total = 0;
+            }
+        }
+    }
+    contador.innerHTML = total;
+}
+actualizarContadorCarrito();
+</script>
 
 <main class="contenido">
 
