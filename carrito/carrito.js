@@ -84,3 +84,57 @@ function quitarDelCarrito(id) {
     guardarCarrito(nueva);
     return true;
 }
+
+// Cuenta las noches entre las fechas del formulario. Devuelve 0 si no son válidas.
+function calcularNoches() {
+    var entrada = document.getElementById("fecha_entrada").value;
+    var salida = document.getElementById("fecha_salida").value;
+    if (entrada == "" || salida == "") {
+        return 0;
+    }
+    var dias = (new Date(salida) - new Date(entrada)) / 86400000;
+    if (dias > 0) {
+        return dias;
+    }
+    return 0;
+}
+
+// Cuenta las filas de habitaciones que hay en la tabla.
+function contarFilas() {
+    var total = 0;
+    var filas = document.getElementsByTagName("tr");
+    for (var i = 0; i < filas.length; i++) {
+        if (filas[i].getAttribute("data-precio") != null) {
+            total = total + 1;
+        }
+    }
+    return total;
+}
+
+// Recalcula subtotales y total (CU-14) con la cantidad escrita en cada fila.
+function recalcularTotales() {
+    var noches = calcularNoches();
+    var total = 0;
+    var filas = document.getElementsByTagName("tr");
+    for (var i = 0; i < filas.length; i++) {
+        var id = filas[i].getAttribute("data-id");
+        if (id == null) {
+            continue;
+        }
+        var precio = Number(filas[i].getAttribute("data-precio"));
+        var texto = document.getElementById("cant-" + id).value;
+        var cantidad = 0;
+        if (numeroValido(texto, 1, 10)) {
+            cantidad = Number(texto);
+        }
+        var subtotal = precio * cantidad * noches;
+        total = total + subtotal;
+        var celda = document.getElementById("sub-" + id);
+        if (noches > 0) {
+            celda.innerHTML = "$" + subtotal.toFixed(2);
+        } else {
+            celda.innerHTML = "Se calcula al elegir las fechas";
+        }
+    }
+    document.getElementById("total").innerHTML = total.toFixed(2);
+}

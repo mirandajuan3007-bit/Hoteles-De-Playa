@@ -126,16 +126,22 @@ function actualizarCantidad(id) {
     if (!confirmarAccion("¿Cambiar la cantidad de esta habitación?")) {
         return;
     }
-    if (cambiarCantidad(id, nueva)) {
-        window.location.href = "index.php";
-    }
+    cambiarCantidad(id, nueva);
+    recalcularTotales();
 }
 
 function pedirQuitar(id) {
-    if (confirmarAccion("¿Quitar esta habitación del carrito?")) {
-        quitarDelCarrito(id);
-        window.location.href = "index.php";
+    if (!confirmarAccion("¿Quitar esta habitación del carrito?")) {
+        return;
     }
+    quitarDelCarrito(id);
+    var fila = document.getElementById("fila-" + id);
+    fila.parentNode.removeChild(fila);
+    if (contarFilas() == 0) {
+        window.location.href = "index.php";
+        return;
+    }
+    recalcularTotales();
 }
 </script>
 
@@ -184,12 +190,12 @@ function pedirQuitar(id) {
         </thead>
         <tbody>
             <?php foreach ($habitaciones as $habitacion) { ?>
-                <tr>
+                <tr id="fila-<?php echo (int)$habitacion["id"]; ?>" data-id="<?php echo (int)$habitacion["id"]; ?>" data-precio="<?php echo (float)$habitacion["precio"]; ?>">
                     <td><?php echo htmlspecialchars($habitacion["nombre"], ENT_QUOTES, "UTF-8"); ?></td>
                     <td>$<?php echo number_format($habitacion["precio"], 2); ?></td>
                     <td><?php echo (int)$habitacion["cantidad"]; ?></td>
                     <?php if ($subtotalCalculado) { ?><td><?php echo $noches; ?></td><?php } ?>
-                    <td>
+                    <td id="sub-<?php echo (int)$habitacion["id"]; ?>">
                         <?php if ($subtotalCalculado) { ?>
                             $<?php echo number_format($habitacion["subtotal"], 2); ?>
                         <?php } else { ?>
@@ -197,7 +203,7 @@ function pedirQuitar(id) {
                         <?php } ?>
                     </td>
                     <td>
-                        <input type="number" id="cant-<?php echo (int)$habitacion["id"]; ?>" min="1" max="10"
+                        <input type="number" id="cant-<?php echo (int)$habitacion["id"]; ?>" min="1" max="10" oninput="recalcularTotales()"
                                value="<?php echo (int)$habitacion["cantidad"]; ?>">
                         <button type="button" onclick="actualizarCantidad(<?php echo (int)$habitacion["id"]; ?>)">Actualizar</button>
                         <button type="button" onclick="pedirQuitar(<?php echo (int)$habitacion["id"]; ?>)">Quitar</button>
@@ -207,9 +213,7 @@ function pedirQuitar(id) {
         </tbody>
     </table>
 
-    <?php if ($subtotalCalculado) { ?>
-        <h3>Total: $<?php echo number_format($total, 2); ?></h3>
-    <?php } ?>
+    <h3>Total: $<span id="total"><?php echo number_format($total, 2); ?></span></h3>
 <?php } ?>
 
 <?php include($raiz . "includes/pie.php"); ?>
