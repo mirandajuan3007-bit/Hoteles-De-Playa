@@ -138,6 +138,7 @@ function actualizarCantidad(id, disponibles) {
         return;
     }
     cambiarCantidad(id, nueva);
+    actualizarContadorCarrito();
     recalcularTotales();
 }
 
@@ -146,6 +147,7 @@ function pedirQuitar(id) {
         return;
     }
     quitarDelCarrito(id);
+    actualizarContadorCarrito();
     var fila = document.getElementById("fila-" + id);
     fila.parentNode.removeChild(fila);
     if (contarFilas() == 0) {
@@ -168,11 +170,11 @@ function pedirQuitar(id) {
 <?php } else { ?>
     <form class="formulario" method="post" action="index.php" onsubmit="return validarFechas();">
         <label for="fecha_entrada">Fecha de entrada</label>
-        <input type="date" id="fecha_entrada" name="fecha_entrada" required
+        <input type="date" id="fecha_entrada" name="fecha_entrada" required onchange="recalcularTotales()"
                value="<?php echo htmlspecialchars($fechaEntrada, ENT_QUOTES, "UTF-8"); ?>">
 
         <label for="fecha_salida">Fecha de salida</label>
-        <input type="date" id="fecha_salida" name="fecha_salida" required
+        <input type="date" id="fecha_salida" name="fecha_salida" required onchange="recalcularTotales()"
                value="<?php echo htmlspecialchars($fechaSalida, ENT_QUOTES, "UTF-8"); ?>">
 
         <div class="botones">
@@ -214,7 +216,7 @@ function pedirQuitar(id) {
                             <br><span class="texto-error">Solo hay <?php echo (int)$habitacion["disponibles"]; ?> disponibles.</span>
                         <?php } ?>
                     </td>
-                    <?php if ($subtotalCalculado) { ?><td><?php echo $noches; ?></td><?php } ?>
+                    <?php if ($subtotalCalculado) { ?><td id="noches-<?php echo (int)$habitacion["id"]; ?>"><?php echo $noches; ?></td><?php } ?>
                     <td id="sub-<?php echo (int)$habitacion["id"]; ?>">
                         <?php if ($subtotalCalculado) { ?>
                             $<?php echo number_format($habitacion["subtotal"], 2); ?>
