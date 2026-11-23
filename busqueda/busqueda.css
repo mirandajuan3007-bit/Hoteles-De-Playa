@@ -1,0 +1,12 @@
+/* Estilos de la busqueda (CU-10).
+   Estan en esta carpeta para no modificar css/estilos.css, que es compartido. */
+
+/* estilos.css solo da formato a los input; aqui se iguala el select */
+.formulario-busqueda select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #90a4ae;
+    box-sizing: border-box;
+    background-color: white;
+}

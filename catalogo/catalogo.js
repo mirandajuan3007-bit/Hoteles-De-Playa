@@ -48,9 +48,8 @@ document.onkeydown = function (evento) {
 };
 
 // ===== CU-08: boton "Agregar al carrito" =====
-// Usa agregarAlCarrito() y leerCarrito() de carrito/carrito.js, que ya hizo Jorge.
-// Este boton solo existe cuando hay sesion, y en ese caso la pagina carga
-// primero validaciones.js y despues carrito.js.
+// Usa agregarAlCarrito() y leerCarrito() de carrito/carrito.js
+// Este boton solo existe cuando hay una sesion activa, y solo se muestra si la habitacion tiene disponibilidad.
 
 function agregarHabitacion(id, disponibles) {
     // Cuantas habitaciones de este tipo hay ya en el carrito.
