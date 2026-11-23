@@ -1,0 +1,97 @@
+/* Estilos del catalogo (CU-08 y CU-09).
+   Estan en esta carpeta para no modificar css/estilos.css, que es un archivo
+   compartido (solo se cambia por Pull Request). Usan los mismos colores. */
+
+.aviso-visitante {
+    padding: 10px;
+    background-color: #e3f2fd;
+    border-left: 4px solid #0077b6;
+}
+
+.categoria {
+    margin-bottom: 30px;
+}
+
+.categoria h3 {
+    color: #023e8a;
+    border-bottom: 2px solid #0077b6;
+    padding-bottom: 6px;
+}
+
+/* Tarjetas en cuadricula: se acomodan solas segun el ancho de la pantalla */
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+
+.tarjeta {
+    padding: 12px;
+    background-color: white;
+    border: 1px solid #cfd8dc;
+    border-top: 4px solid #0077b6;
+}
+
+.tarjeta img,
+.sin-imagen {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+    display: block;
+}
+
+.sin-imagen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eceff1;
+    color: #78909c;
+}
+
+.tarjeta h4 {
+    margin: 12px 0 6px 0;
+    color: #023e8a;
+}
+
+.tarjeta .precio {
+    font-weight: bold;
+    color: #0077b6;
+}
+
+.tarjeta-botones .boton {
+    margin: 4px 4px 0 0;
+}
+
+/* ===== Ventana emergente (CU-09) ===== */
+.ventana-fondo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+}
+
+.ventana-caja {
+    width: 420px;
+    max-width: 90%;
+    max-height: 90%;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.ventana-caja h3 {
+    margin-top: 0;
+    color: #023e8a;
+}
+
+.ventana-caja img {
+    width: 100%;
+    max-height: 250px;
+    object-fit: cover;
+}
