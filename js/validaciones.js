@@ -16,7 +16,7 @@ function correoValido(correo) {
     return false;
 }
 
-// Devuelve true si el número está entre min y max (incluidos).
+// Devuelve true si el número está entre min y max.
 function numeroValido(valor, min, max) {
     var numero = Number(valor);
     if (numero >= min && numero <= max) {
