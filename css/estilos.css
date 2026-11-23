@@ -154,6 +154,164 @@ body {
     padding: 6px;
 }
 
+/* ===== Pagina de inicio ===== */
+
+/* Portada: la foto ocupa todo el ancho del contenido y el texto va delante.
+   Los margenes negativos quitan el espacio blanco de .contenido. */
+.portada {
+    margin: -20px -20px 30px -20px;
+    min-height: 420px;
+    display: flex;
+    align-items: flex-end;
+    /* El degradado oscuro ayuda a leer el texto blanco sobre la foto */
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.1)), url("../imagenes/inicio/playa-dos.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* Si arriba hay un mensaje (por ejemplo "Acceso no autorizado"), no se enciman */
+.mensaje-error + .portada {
+    margin-top: 0;
+}
+
+.portada-texto {
+    padding: 30px;
+    color: white;
+    max-width: 550px;
+}
+
+.portada-texto h2 {
+    margin: 10px 0;
+    font-size: 36px;
+}
+
+.portada-texto p {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.etiqueta {
+    display: inline-block;
+    padding: 4px 10px;
+    background-color: #f4a261;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.boton-claro {
+    background-color: white;
+    color: #0077b6;
+}
+
+.boton-claro:hover {
+    background-color: #e3f2fd;
+}
+
+/* Bienvenida: texto a la izquierda y foto a la derecha */
+.bienvenida {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.bienvenida-texto {
+    flex: 1;
+    min-width: 260px;
+}
+
+.bienvenida-texto h2 {
+    color: #023e8a;
+}
+
+.bienvenida img {
+    width: 420px;
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* Servicios: tres tarjetas en fila */
+.servicios {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.servicio {
+    flex: 1;
+    min-width: 200px;
+    padding: 20px;
+    background-color: #e3f2fd;
+    border-top: 4px solid #0077b6;
+}
+
+.servicio h3 {
+    margin-top: 0;
+    color: #023e8a;
+}
+
+/* Invitacion final con la foto del atardecer de fondo */
+.invitacion {
+    margin: 0 -20px -20px -20px;
+    padding: 50px 20px;
+    text-align: center;
+    color: white;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url("../imagenes/inicio/playa-uno.webp");
+    background-size: cover;
+    background-position: center;
+}
+
+.invitacion h2 {
+    margin-top: 0;
+    font-size: 30px;
+}
+
+/* ===== Iniciar sesion y registro: formulario y foto lado a lado ===== */
+.acceso {
+    display: flex;
+    gap: 30px;
+    align-items: stretch;
+}
+
+.acceso-formulario {
+    flex: 1;
+}
+
+.acceso-foto {
+    flex: 1;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 25px;
+    color: white;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    /* Sombra interior oscura abajo para que se lea el texto */
+    box-shadow: inset 0 -120px 80px -40px rgba(0, 0, 0, 0.6);
+}
+
+.acceso-foto p {
+    margin: 4px 0;
+}
+
+.acceso-frase {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* En pantallas chicas (celular) se oculta la foto para dejar solo el formulario */
+@media (max-width: 700px) {
+    .acceso-foto {
+        display: none;
+    }
+}
+
 .mensaje-exito {
     padding: 10px;
     margin-bottom: 10px;

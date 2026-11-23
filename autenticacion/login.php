@@ -65,6 +65,10 @@ $raiz = "../";
 include($raiz . "includes/encabezado.php");
 ?>
 
+<!-- Diseño partido: formulario a la izquierda y foto a la derecha -->
+<div class="acceso">
+<div class="acceso-formulario">
+
 <h2>Iniciar sesión</h2>
 
 <?php if (isset($_GET["registro"]) && $error == "") { ?>
@@ -91,6 +95,14 @@ include($raiz . "includes/encabezado.php");
 
     <p>¿No tienes cuenta? <a href="registro.php">Regístrate</a></p>
 </form>
+
+</div>
+
+<div class="acceso-foto" style="background-image: url('<?php echo $raiz; ?>imagenes/inicio/playa-uno.webp');">
+    <p class="acceso-frase">Tu lugar frente al mar te espera</p>
+    <p>Inicia sesión para reservar tu estancia.</p>
+</div>
+</div>
 
 <script src="<?php echo $raiz; ?>js/validaciones.js"></script>
 <script>

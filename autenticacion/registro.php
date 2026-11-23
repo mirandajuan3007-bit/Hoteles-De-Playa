@@ -72,6 +72,10 @@ $raiz = "../";
 include($raiz . "includes/encabezado.php");
 ?>
 
+<!-- Diseño partido: formulario a la izquierda y foto a la derecha -->
+<div class="acceso">
+<div class="acceso-formulario">
+
 <h2>Crear cuenta de huésped</h2>
 
 <!-- novalidate: la validacion la hace JavaScript (validarRegistro) y no el navegador. -->
@@ -105,6 +109,14 @@ include($raiz . "includes/encabezado.php");
 
     <p>¿Ya tienes cuenta? <a href="login.php">Inicia sesión</a></p>
 </form>
+
+</div>
+
+<div class="acceso-foto" style="background-image: url('<?php echo $raiz; ?>imagenes/inicio/hotel-playa.jpg');">
+    <p class="acceso-frase">Únete y reserva tus vacaciones</p>
+    <p>Crea tu cuenta en un minuto.</p>
+</div>
+</div>
 
 <script src="<?php echo $raiz; ?>js/validaciones.js"></script>
 <script>
