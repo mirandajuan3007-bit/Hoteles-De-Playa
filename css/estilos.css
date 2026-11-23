@@ -270,6 +270,48 @@ body {
     font-size: 30px;
 }
 
+/* ===== Iniciar sesion y registro: formulario y foto lado a lado ===== */
+.acceso {
+    display: flex;
+    gap: 30px;
+    align-items: stretch;
+}
+
+.acceso-formulario {
+    flex: 1;
+}
+
+.acceso-foto {
+    flex: 1;
+    min-height: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 25px;
+    color: white;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    /* Sombra interior oscura abajo para que se lea el texto */
+    box-shadow: inset 0 -120px 80px -40px rgba(0, 0, 0, 0.6);
+}
+
+.acceso-foto p {
+    margin: 4px 0;
+}
+
+.acceso-frase {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* En pantallas chicas (celular) se oculta la foto para dejar solo el formulario */
+@media (max-width: 700px) {
+    .acceso-foto {
+        display: none;
+    }
+}
+
 .mensaje-exito {
     padding: 10px;
     margin-bottom: 10px;

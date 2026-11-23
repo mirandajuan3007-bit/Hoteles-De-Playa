@@ -7,12 +7,23 @@ include($raiz . "includes/encabezado.php");
 <!-- Portada: foto grande con el texto delante -->
 <section class="portada">
     <div class="portada-texto">
-        <span class="etiqueta">Todo incluido</span>
-        <h2>Tu descanso frente al mar</h2>
-        <p>Habitaciones cómodas, playa de arena blanca y atardeceres inolvidables.</p>
-        <a href="<?php echo $raiz; ?>catalogo/index.php" class="boton">Ver habitaciones</a>
         <?php if ($rol == "") { ?>
+            <!-- Visitante -->
+            <span class="etiqueta">Todo incluido</span>
+            <h2>Tu descanso frente al mar</h2>
+            <p>Habitaciones cómodas, playa de arena blanca y atardeceres inolvidables.</p>
+            <a href="<?php echo $raiz; ?>catalogo/index.php" class="boton">Ver habitaciones</a>
             <a href="<?php echo $raiz; ?>autenticacion/registro.php" class="boton boton-claro">Crear cuenta</a>
+        <?php } else { ?>
+            <!-- Usuario con sesion: saludo con su nombre y accesos segun su rol -->
+            <span class="etiqueta">Bienvenido de nuevo</span>
+            <h2>Hola, <?php echo htmlspecialchars($_SESSION["usuario_nombre"], ENT_QUOTES, "UTF-8"); ?></h2>
+            <p>¿Listo para tu próxima escapada al mar? Elige tu habitación y reserva en pocos pasos.</p>
+            <a href="<?php echo $raiz; ?>catalogo/index.php" class="boton">Ver habitaciones</a>
+            <a href="<?php echo $raiz; ?>carrito/index.php" class="boton boton-claro">Mi carrito</a>
+            <?php if ($rol == "admin") { ?>
+                <a href="<?php echo $raiz; ?>admin/index.php" class="boton boton-claro">Administración</a>
+            <?php } ?>
         <?php } ?>
     </div>
 </section>
