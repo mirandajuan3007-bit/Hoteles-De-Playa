@@ -3,7 +3,15 @@ function leerCarrito() {
     var partes = document.cookie.split("; ");
     for (var i = 0; i < partes.length; i++) {
         if (partes[i].indexOf("carrito=") == 0) {
-            return JSON.parse(decodeURIComponent(partes[i].substring(8)));
+            try {
+                var datos = JSON.parse(decodeURIComponent(partes[i].substring(8)));
+                if (datos instanceof Array) {
+                    return datos;
+                }
+            } catch (error) {
+                // Cookie dañada: se trata como carrito vacío.
+            }
+            return [];
         }
     }
     return [];
