@@ -20,7 +20,7 @@ function permitirSolo($roles) {
     }
 
     // Tiene sesion, pero su rol no puede ver esta pagina.
-    if (!in_array($_SESSION["rol"], $roles)) {
+    if (!in_array($_SESSION["rol"], $roles, true)) {
         $_SESSION["mensaje"] = "Acceso no autorizado.";
         header("Location: ../index.php");
         exit;

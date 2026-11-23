@@ -4,6 +4,14 @@
 //   $titulo = "Nombre de la pagina";
 //   $raiz = "";     (pagina en la carpeta principal)
 //   $raiz = "../";  (pagina dentro de una carpeta)
+
+// CU-04: este archivo no es una pagina. Si alguien lo abre directo en el
+// navegador (no viene $titulo ni $raiz), lo manda al inicio.
+if (!isset($titulo) || !isset($raiz)) {
+    header("Location: ../index.php");
+    exit;
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
