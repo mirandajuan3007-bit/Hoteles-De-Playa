@@ -16,6 +16,7 @@ $habitaciones = array();
 require_once($raiz . "includes/conexion.php");
 
 $elementosCarrito = array();
+$excedeDisponibles = false;
 if (isset($_COOKIE["carrito"]) && is_string($_COOKIE["carrito"])) {
     $carritoDecodificado = json_decode($_COOKIE["carrito"], true);
     if (is_array($carritoDecodificado)) {
@@ -43,6 +44,10 @@ foreach ($elementosCarrito as $elemento) {
     mysqli_stmt_bind_result($consulta, $idGuardado, $nombre, $precio, $disponibles);
 
     if (mysqli_stmt_fetch($consulta)) {
+        // Avisa si en el carrito hay mas habitaciones de las disponibles.
+        if ($cantidad > $disponibles) {
+            $excedeDisponibles = true;
+        }
         $habitaciones[] = array(
             "id" => $idGuardado,
             "nombre" => $nombre,
@@ -117,10 +122,16 @@ function validarFechas() {
     return true;
 }
 
-function actualizarCantidad(id) {
-    var nueva = document.getElementById("cant-" + id).value;
-    if (!numeroValido(nueva, 1, 10)) {
-        alert("La cantidad debe ser un número entero entre 1 y 10.");
+// No deja pedir mas habitaciones de las que hay disponibles.
+function actualizarCantidad(id, disponibles) {
+   var nueva = document.getElementById("cant-" + id).value;
+
+   if (!numeroValido(nueva, 1, 10)) {
+      alert("La cantidad debe ser un número entero entre 1 y 10.");
+      return;
+    }
+    if (Number(nueva) > disponibles) {
+        alert("Solo hay " + disponibles + " habitaciones disponibles de este tipo.");
         return;
     }
     if (!confirmarAccion("¿Cambiar la cantidad de esta habitación?")) {
@@ -146,26 +157,28 @@ function pedirQuitar(id) {
 </script>
 
 <?php if ($mensaje !== "") { ?>
-    <p role="alert"><?php echo htmlspecialchars($mensaje, ENT_QUOTES, "UTF-8"); ?></p>
+    <div class="mensaje-error" role="alert"><?php echo htmlspecialchars($mensaje, ENT_QUOTES, "UTF-8"); ?></div>
+<?php } elseif ($excedeDisponibles) { ?>
+    <div class="mensaje-error" role="alert">Una o más habitaciones superan la cantidad disponible. Ajusta la cantidad.</div>
 <?php } ?>
 
 <?php if (count($habitaciones) === 0) { ?>
     <p>Tu carrito está vacío.</p>
-    <p><a href="../index.php">Volver al inicio</a></p>
+    <p><a href="../index.php" class="boton">Volver al inicio</a></p>
 <?php } else { ?>
-    <form method="post" action="index.php" onsubmit="return validarFechas();">
-        <p>
-            <label for="fecha_entrada">Fecha de entrada:</label><br>
-            <input type="date" id="fecha_entrada" name="fecha_entrada" required
-                   value="<?php echo htmlspecialchars($fechaEntrada, ENT_QUOTES, "UTF-8"); ?>">
-        </p>
-        <p>
-            <label for="fecha_salida">Fecha de salida:</label><br>
-            <input type="date" id="fecha_salida" name="fecha_salida" required
-                   value="<?php echo htmlspecialchars($fechaSalida, ENT_QUOTES, "UTF-8"); ?>">
-        </p>
-        <button type="submit">Calcular subtotales</button>
-        <a href="../index.php">Cancelar</a>
+    <form class="formulario" method="post" action="index.php" onsubmit="return validarFechas();">
+        <label for="fecha_entrada">Fecha de entrada</label>
+        <input type="date" id="fecha_entrada" name="fecha_entrada" required
+               value="<?php echo htmlspecialchars($fechaEntrada, ENT_QUOTES, "UTF-8"); ?>">
+
+        <label for="fecha_salida">Fecha de salida</label>
+        <input type="date" id="fecha_salida" name="fecha_salida" required
+               value="<?php echo htmlspecialchars($fechaSalida, ENT_QUOTES, "UTF-8"); ?>">
+
+        <div class="botones">
+            <button type="submit" class="boton">Calcular subtotales</button>
+            <a href="../index.php" class="boton boton-cancelar">Cancelar</a>
+        </div>
     </form>
 
     <?php if ($subtotalCalculado) { ?>
@@ -177,7 +190,7 @@ function pedirQuitar(id) {
         </p>
     <?php } ?>
 
-    <table>
+    <table class="tabla">
         <thead>
             <tr>
                 <th>Habitación</th>
@@ -193,7 +206,14 @@ function pedirQuitar(id) {
                 <tr id="fila-<?php echo (int)$habitacion["id"]; ?>" data-id="<?php echo (int)$habitacion["id"]; ?>" data-precio="<?php echo (float)$habitacion["precio"]; ?>">
                     <td><?php echo htmlspecialchars($habitacion["nombre"], ENT_QUOTES, "UTF-8"); ?></td>
                     <td>$<?php echo number_format($habitacion["precio"], 2); ?></td>
-                    <td><?php echo (int)$habitacion["cantidad"]; ?></td>
+                    <td>
+                        <input type="number" class="campo-cantidad" id="cant-<?php echo (int)$habitacion["id"]; ?>" min="1" max="10" oninput="recalcularTotales()"
+                               value="<?php echo (int)$habitacion["cantidad"]; ?>" aria-label="Cantidad">
+                        <button type="button" class="boton" onclick="actualizarCantidad(<?php echo (int)$habitacion["id"]; ?>, <?php echo (int)$habitacion["disponibles"]; ?>)">Actualizar</button>
+                        <?php if ($habitacion["cantidad"] > $habitacion["disponibles"]) { ?>
+                            <br><span class="texto-error">Solo hay <?php echo (int)$habitacion["disponibles"]; ?> disponibles.</span>
+                        <?php } ?>
+                    </td>
                     <?php if ($subtotalCalculado) { ?><td><?php echo $noches; ?></td><?php } ?>
                     <td id="sub-<?php echo (int)$habitacion["id"]; ?>">
                         <?php if ($subtotalCalculado) { ?>
@@ -203,10 +223,7 @@ function pedirQuitar(id) {
                         <?php } ?>
                     </td>
                     <td>
-                        <input type="number" id="cant-<?php echo (int)$habitacion["id"]; ?>" min="1" max="10" oninput="recalcularTotales()"
-                               value="<?php echo (int)$habitacion["cantidad"]; ?>">
-                        <button type="button" onclick="actualizarCantidad(<?php echo (int)$habitacion["id"]; ?>)">Actualizar</button>
-                        <button type="button" onclick="pedirQuitar(<?php echo (int)$habitacion["id"]; ?>)">Quitar</button>
+                        <button type="button" class="boton boton-cancelar" onclick="pedirQuitar(<?php echo (int)$habitacion["id"]; ?>)">Quitar</button>
                     </td>
                 </tr>
             <?php } ?>

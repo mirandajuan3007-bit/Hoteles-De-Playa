@@ -18,7 +18,18 @@ function correoValido(correo) {
 
 // Devuelve true si el número está entre min y max (incluidos).
 function numeroValido(valor, min, max) {
-    var numero = Number(valor);
+    var texto = String(valor);
+    if (texto == "") {
+        return false;
+    }
+    // Solo se aceptan dígitos del 0 al 9: sin punto, sin espacios, sin letras.
+    for (var i = 0; i < texto.length; i++) {
+        var letra = texto.charAt(i);
+        if (letra < "0" || letra > "9") {
+            return false;
+        }
+    }
+    var numero = Number(texto);
     if (numero >= min && numero <= max) {
         return true;
     }
