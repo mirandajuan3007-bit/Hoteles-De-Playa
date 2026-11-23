@@ -131,10 +131,20 @@ function recalcularTotales() {
         total = total + subtotal;
         var celda = document.getElementById("sub-" + id);
         if (noches > 0) {
-            celda.innerHTML = "$" + subtotal.toFixed(2);
+            celda.innerHTML = "$" + formatoPesos(subtotal);
         } else {
             celda.innerHTML = "Se calcula al elegir las fechas";
         }
+        // Si ya se mostro la columna de noches, tambien se actualiza.
+        var celdaNoches = document.getElementById("noches-" + id);
+        if (celdaNoches != null) {
+            celdaNoches.innerHTML = noches;
+        }
     }
-    document.getElementById("total").innerHTML = total.toFixed(2);
+    document.getElementById("total").innerHTML = formatoPesos(total);
+}
+
+// Da formato con coma de miles y dos decimales, igual que number_format() de PHP: 10,000.00
+function formatoPesos(numero) {
+    return numero.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
