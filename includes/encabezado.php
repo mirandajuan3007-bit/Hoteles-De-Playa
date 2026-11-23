@@ -34,6 +34,8 @@ if ($conexionMenu) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <!-- En celulares usa el ancho real de la pantalla -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title><?php echo $titulo; ?> - Hoteles de Playa</title>
     <link rel="stylesheet" href="<?php echo $raiz; ?>css/estilos.css">
 </head>
