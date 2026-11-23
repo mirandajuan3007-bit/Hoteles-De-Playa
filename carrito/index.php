@@ -124,9 +124,17 @@ function validarFechas() {
 
 // No deja pedir mas habitaciones de las que hay disponibles.
 function actualizarCantidad(id, disponibles) {
-    var nueva = document.getElementById("cant-" + id).value;
+   var nueva = document.getElementById("cant-" + id).value;
+
+   if (!numeroValido(nueva, 1, 10)) {
+      alert("La cantidad debe ser un número entero entre 1 y 10.");
+      return;
+    }
     if (Number(nueva) > disponibles) {
         alert("Solo hay " + disponibles + " habitaciones disponibles de este tipo.");
+        return;
+    }
+    if (!confirmarAccion("¿Cambiar la cantidad de esta habitación?")) {
         return;
     }
     if (cambiarCantidad(id, nueva)) {
