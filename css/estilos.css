@@ -125,6 +125,35 @@ body {
     border: 1px solid #f5c6cb;
 }
 
+.texto-error {
+    color: #b71c1c;
+    font-size: 13px;
+}
+
+/* Tablas (carrito y reportes) */
+.tabla {
+    width: 100%;
+    margin-top: 16px;
+    border-collapse: collapse;
+}
+
+.tabla th,
+.tabla td {
+    padding: 8px;
+    border: 1px solid #cfd8dc;
+    text-align: left;
+}
+
+.tabla th {
+    background-color: #0077b6;
+    color: white;
+}
+
+.campo-cantidad {
+    width: 60px;
+    padding: 6px;
+}
+
 .mensaje-exito {
     padding: 10px;
     margin-bottom: 10px;
