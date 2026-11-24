@@ -234,9 +234,11 @@ function pedirQuitar(id) {
 
     <h3>Total: $<span id="total"><?php echo number_format($total, 2); ?></span></h3>
     <?php if ($subtotalCalculado) { ?>
-        <p>
-            <a href="../pago/index.php?fecha_entrada=<?php echo urlencode($fechaEntrada); ?>&amp;fecha_salida=<?php echo urlencode($fechaSalida); ?>">Pagar</a>
-        </p>
+        <form method="post" action="../pago/index.php">
+            <input type="hidden" name="fecha_entrada" value="<?php echo htmlspecialchars($fechaEntrada, ENT_QUOTES, "UTF-8"); ?>">
+            <input type="hidden" name="fecha_salida" value="<?php echo htmlspecialchars($fechaSalida, ENT_QUOTES, "UTF-8"); ?>">
+            <button type="submit">Pagar</button>
+        </form>
     <?php } ?>
 <?php } ?>
 
