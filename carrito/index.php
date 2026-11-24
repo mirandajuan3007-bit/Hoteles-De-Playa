@@ -61,6 +61,17 @@ foreach ($elementosCarrito as $elemento) {
     mysqli_stmt_close($consulta);
 }
 
+// Si el administrador elimino una habitacion que estaba en el carrito, se quita
+// de la cookie; si no, no se podria quitar desde aqui y el pago siempre fallaria.
+if (isset($_COOKIE["carrito"]) && count($habitaciones) < count($elementosCarrito)) {
+    $carritoLimpio = array();
+    foreach ($habitaciones as $habitacion) {
+        $carritoLimpio[] = array("id" => (int)$habitacion["id"], "cantidad" => (int)$habitacion["cantidad"]);
+    }
+    setcookie("carrito", json_encode($carritoLimpio), time() + 7 * 24 * 60 * 60, "/");
+    $_COOKIE["carrito"] = json_encode($carritoLimpio);
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fechaEntrada = trim($_POST["fecha_entrada"] ?? "");
     $fechaSalida = trim($_POST["fecha_salida"] ?? "");
