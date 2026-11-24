@@ -2,6 +2,12 @@
 include_once("../includes/permisos.php");
 permitirSolo(array("admin"));
 
+// Este archivo solo guarda funciones: si lo abren directo, regresa al listado.
+if (basename($_SERVER["SCRIPT_FILENAME"]) == basename(__FILE__)) {
+    header("Location: index.php");
+    exit;
+}
+
 function obtenerCategoriasAdmin($conexion) {
     $categorias = array();
     $resultado = mysqli_query($conexion, "SELECT nombre FROM categorias ORDER BY nombre");

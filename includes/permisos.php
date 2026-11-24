@@ -7,6 +7,13 @@
 //   permitirSolo(array("huesped", "admin"));  cualquier usuario con sesion
 // Las paginas protegidas estan dentro de una carpeta (admin/, carrito/, pago/),
 // por eso las rutas empiezan con "../".
+
+// Este archivo no es una pagina: si lo abren directo, se manda al inicio.
+if (basename($_SERVER["SCRIPT_FILENAME"]) == basename(__FILE__)) {
+    header("Location: ../index.php");
+    exit;
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
