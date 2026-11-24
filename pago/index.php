@@ -33,7 +33,9 @@ if (isset($_REQUEST["fecha_salida"]) && is_string($_REQUEST["fecha_salida"])) {
 $carrito = leerCarritoCookie();
 
 // ===== Procesar el pago =====
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Solo se procesa el pago cuando llegan los datos de la tarjeta. Desde el carrito
+// solo llegan las fechas por POST y entonces nada mas se muestra el formulario.
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["titular"])) {
     $titular = trim($_POST["titular"] ?? "");
     $tarjeta = str_replace(" ", "", trim($_POST["tarjeta"] ?? ""));
     $vencimiento = trim($_POST["vencimiento"] ?? "");
@@ -129,7 +131,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     break;
                 }
 
-                // La condicion "disponibles >= ?" evita que la disponibilidad quede en negativo.
                 $consulta = mysqli_prepare($conexion,
                     "UPDATE habitaciones SET disponibles = disponibles - ? WHERE id = ? AND disponibles >= ?");
                 mysqli_stmt_bind_param($consulta, "iii", $hab["cantidad"], $hab["id"], $hab["cantidad"]);
@@ -275,7 +276,7 @@ include($raiz . "includes/encabezado.php");
                                    autocomplete="cc-csc" placeholder="123">
                         </div>
                     </div>
-                    <p class="pago-nota">Pago simulado para el proyecto: no se realiza ningún cargo real. Solo se guardan los últimos 4 dígitos de la tarjeta.</p>
+                    <p class="pago-nota">Pago simulado para el proyecto.</p>
                 </fieldset>
 
                 <div class="botones">

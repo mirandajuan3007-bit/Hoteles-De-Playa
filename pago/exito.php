@@ -1,6 +1,6 @@
 <?php
 // CU-15 Pagar reservacion: pagina que se muestra despues de un pago correcto.
-// Recibe el folio en la URL (exito.php?folio=5) y solo muestra la reservacion
+// Recibe el folio en la URL y solo muestra la reservacion
 // si pertenece al usuario de la sesion.
 
 include_once("../includes/permisos.php");
