@@ -54,6 +54,10 @@ CREATE TABLE reservaciones (
   fecha_entrada DATE NOT NULL,
   fecha_salida DATE NOT NULL,
   total DECIMAL(10,2) NOT NULL,
+  -- Datos del pago (simulado). Solo se guardan los ultimos 4 digitos de la tarjeta.
+  fecha_reservacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  titular VARCHAR(100) NOT NULL,
+  tarjeta_final CHAR(4) NOT NULL,
   PRIMARY KEY (id_reservacion),
   FOREIGN KEY (usuario_id) REFERENCES usuarios (usuario_id)
 );
