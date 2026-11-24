@@ -1,0 +1,80 @@
+/* Estilos del pago (CU-15).
+   Estan en esta carpeta para no modificar css/estilos.css, que es un archivo
+   compartido (solo se cambia por Pull Request). Usan los mismos colores. */
+
+/* Resumen a la izquierda y formulario a la derecha */
+.pago {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.pago-resumen {
+    flex: 3;
+    min-width: 300px;
+}
+
+.pago-formulario {
+    flex: 2;
+    min-width: 280px;
+}
+
+.pago-resumen h3,
+.pago-exito h3 {
+    color: #023e8a;
+    margin-top: 0;
+}
+
+.pago-total {
+    font-size: 20px;
+    font-weight: bold;
+    color: #023e8a;
+}
+
+.pago-formulario fieldset {
+    margin: 0 0 16px 0;
+    padding: 10px 16px 16px 16px;
+    border: 1px solid #cfd8dc;
+    border-top: 4px solid #0077b6;
+}
+
+.pago-formulario legend {
+    padding: 0 6px;
+    font-weight: bold;
+    color: #023e8a;
+}
+
+/* Vencimiento y CVV en la misma fila */
+.pago-fila {
+    display: flex;
+    gap: 12px;
+}
+
+.pago-fila div {
+    flex: 1;
+}
+
+.pago-nota {
+    margin-bottom: 0;
+    font-size: 13px;
+    color: #546e7a;
+}
+
+/* ===== Pagina de exito ===== */
+.pago-exito .mensaje-exito {
+    font-size: 18px;
+}
+
+.pago-datos p {
+    margin: 6px 0;
+}
+
+.pago-exito .botones .boton {
+    margin: 4px 4px 0 0;
+}
+
+/* En fondo blanco, el boton claro necesita borde para verse */
+.pago-exito .boton-claro {
+    border: 1px solid #0077b6;
+}
