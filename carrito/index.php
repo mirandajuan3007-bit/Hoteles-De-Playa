@@ -233,6 +233,11 @@ function pedirQuitar(id) {
     </table>
 
     <h3>Total: $<span id="total"><?php echo number_format($total, 2); ?></span></h3>
+    <?php if ($subtotalCalculado) { ?>
+        <p>
+            <a href="../pago/index.php?fecha_entrada=<?php echo urlencode($fechaEntrada); ?>&amp;fecha_salida=<?php echo urlencode($fechaSalida); ?>">Pagar</a>
+        </p>
+    <?php } ?>
 <?php } ?>
 
 <?php include($raiz . "includes/pie.php"); ?>
