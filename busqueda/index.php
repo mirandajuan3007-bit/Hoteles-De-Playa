@@ -1,16 +1,9 @@
 <?php
-// TEMPORAL: muestra los errores en pantalla. Borra estas 2 lineas antes de hacer commit.
-ini_set("display_errors", 1);
-error_reporting(E_ALL);
-
 // CU-10 Buscar habitaciones.
 // La puede usar cualquier usuario (visitante, huesped o administrador),
 // por eso NO incluye permisos.php.
 $titulo = "Buscar habitaciones";
 $raiz = "../";
-
-// Hace que mysqli avise con errores (excepciones) en cualquier version de PHP.
-mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
 require_once($raiz . "includes/conexion.php");
 

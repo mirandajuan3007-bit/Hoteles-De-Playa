@@ -61,6 +61,17 @@ foreach ($elementosCarrito as $elemento) {
     mysqli_stmt_close($consulta);
 }
 
+// Si el administrador elimino una habitacion que estaba en el carrito, se quita
+// de la cookie; si no, no se podria quitar desde aqui y el pago siempre fallaria.
+if (isset($_COOKIE["carrito"]) && count($habitaciones) < count($elementosCarrito)) {
+    $carritoLimpio = array();
+    foreach ($habitaciones as $habitacion) {
+        $carritoLimpio[] = array("id" => (int)$habitacion["id"], "cantidad" => (int)$habitacion["cantidad"]);
+    }
+    setcookie("carrito", json_encode($carritoLimpio), time() + 7 * 24 * 60 * 60, "/");
+    $_COOKIE["carrito"] = json_encode($carritoLimpio);
+}
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fechaEntrada = trim($_POST["fecha_entrada"] ?? "");
     $fechaSalida = trim($_POST["fecha_salida"] ?? "");
@@ -77,6 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $salida <= $entrada
     ) {
         $mensaje = "La fecha de salida debe ser posterior a la fecha de entrada.";
+    } elseif ($fechaEntrada < date("Y-m-d")) {
+        $mensaje = "La fecha de entrada no puede ser anterior a hoy.";
     } else {
         $noches = $entrada->diff($salida)->days;
 
@@ -115,10 +128,33 @@ function validarFechas() {
         alert("Selecciona las fechas de entrada y salida.");
         return false;
     }
+    if (fechaEntrada < "<?php echo date("Y-m-d"); ?>") {
+        alert("La fecha de entrada no puede ser anterior a hoy.");
+        return false;
+    }
     if (fechaSalida <= fechaEntrada) {
         alert("La fecha de salida debe ser posterior a la fecha de entrada.");
         return false;
     }
+    return true;
+}
+
+// Antes de ir al pago: manda las fechas que se ven en pantalla y revisa que
+// las cantidades escritas ya se hayan guardado con "Actualizar".
+function prepararPago() {
+    if (!validarFechas()) {
+        return false;
+    }
+    var lista = leerCarrito();
+    for (var i = 0; i < lista.length; i++) {
+        var campo = document.getElementById("cant-" + lista[i].id);
+        if (campo != null && Number(campo.value) != Number(lista[i].cantidad)) {
+            alert("Pulsa \"Actualizar\" para guardar la nueva cantidad antes de pagar.");
+            return false;
+        }
+    }
+    document.getElementById("pago_entrada").value = document.getElementById("fecha_entrada").value;
+    document.getElementById("pago_salida").value = document.getElementById("fecha_salida").value;
     return true;
 }
 
@@ -234,10 +270,10 @@ function pedirQuitar(id) {
 
     <h3>Total: $<span id="total"><?php echo number_format($total, 2); ?></span></h3>
     <?php if ($subtotalCalculado) { ?>
-        <form method="post" action="../pago/index.php">
-            <input type="hidden" name="fecha_entrada" value="<?php echo htmlspecialchars($fechaEntrada, ENT_QUOTES, "UTF-8"); ?>">
-            <input type="hidden" name="fecha_salida" value="<?php echo htmlspecialchars($fechaSalida, ENT_QUOTES, "UTF-8"); ?>">
-            <button type="submit">Pagar</button>
+        <form method="post" action="../pago/index.php" onsubmit="return prepararPago();">
+            <input type="hidden" id="pago_entrada" name="fecha_entrada" value="<?php echo htmlspecialchars($fechaEntrada, ENT_QUOTES, "UTF-8"); ?>">
+            <input type="hidden" id="pago_salida" name="fecha_salida" value="<?php echo htmlspecialchars($fechaSalida, ENT_QUOTES, "UTF-8"); ?>">
+            <button type="submit" class="boton">Pagar</button>
         </form>
     <?php } ?>
 <?php } ?>

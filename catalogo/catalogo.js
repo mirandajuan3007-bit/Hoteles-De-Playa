@@ -66,6 +66,10 @@ function agregarHabitacion(id, disponibles) {
         return;
     }
 
+    if (!confirmarAccion("¿Agregar esta habitación al carrito?")) {
+        return;
+    }
+
     // Se agrega una habitacion por cada clic. Si la cantidad no es valida,
     // agregarAlCarrito() avisa con su propio mensaje y devuelve false.
     if (agregarAlCarrito(Number(id), 1)) {
